@@ -1,42 +1,145 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* 🌈 Background dan layout dasar */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #e3f2fd, #f1f8e9);
+  color: #333;
+}
+
+/* 🔹 Container utama */
+.app-container {
+  min-height: 100vh;
+  padding: 3rem 1rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* 🏷️ Judul */
+.title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  color: #1565c0;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
+/* 🧱 Grid View */
+.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.8rem;
+  justify-items: center;
+  padding: 0 1rem;
+}
+
+/* 🧑‍💼 Kartu Grid */
+.grid-card {
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  padding: 1.8rem 1.2rem;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.grid-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* 🧑 Avatar lingkaran */
+.avatar-circle {
+  background: linear-gradient(135deg, #64b5f6, #1976d2);
+  color: white;
+  font-weight: 700;
+  font-size: 1.6rem;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(25, 118, 210, 0.4);
+}
+
+/* 🧾 Nama, email, dan perusahaan */
+.grid-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0d47a1;
+  margin: 0.5rem 0;
+}
+
+.grid-email {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.grid-company {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #777;
+  margin-bottom: 0.8rem;
+}
+
+/* 📋 Info tambahan */
+.grid-info {
+  font-size: 0.9rem;
+  color: #444;
+  border-top: 1px solid #eee;
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+}
+
+.grid-info p {
+  margin: 4px 0;
+}
+
+/* 🔄 Loading state */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.spinner {
+  border: 4px solid #e0e0e0;
+  border-top: 4px solid #1976d2;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 1rem;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+@keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* ⚠️ Error state */
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #ffebee;
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.error-text {
+  color: #d32f2f;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
