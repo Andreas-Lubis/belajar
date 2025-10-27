@@ -1,68 +1,103 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [city, setCity] = useState("Jakarta");
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("https://jsonplaceholder.typicode.com/users");
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data pengguna!");
-        }
-        const data = await response.json();
-        setUsers(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const API_KEY = "35bef3eba76541e0abe145806252710"; // 🔑 Ganti dengan API key dari https://www.weatherapi.com/
 
-    fetchUsers();
+  // Fetch data cuaca
+  const fetchWeather = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await fetch(
+        `https://api.weatherapi.com/v1/current.json?key=${API_KEY}&q=${city}&aqi=no`
+      );
+      if (!res.ok) throw new Error("Kota tidak ditemukan!");
+      const data = await res.json();
+
+      setWeather(data);
+    } catch (err) {
+      setError(err.message);
+      setWeather(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Ambil data pertama kali
+  useEffect(() => {
+    fetchWeather();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p className="loading-text">Memuat data pengguna...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="error-container">
-        <p className="error-text">Terjadi kesalahan: {error}</p>
-      </div>
-    );
-  }
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchWeather();
+  };
 
   return (
-    <div className="app-container">
-      <h1 className="title">📋 Daftar Pengguna</h1>
+    <div
+      style={{
+        fontFamily: "sans-serif",
+        maxWidth: 400,
+        margin: "50px auto",
+        padding: 20,
+        borderRadius: 12,
+        background: "#f5f5f5",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+      }}
+    >
+      <h2 style={{ textAlign: "center" }}>🌤️ Pendeteksi Cuaca</h2>
 
-      <div className="grid-view">
-        {users.map((user) => (
-          <div key={user.id} className="grid-card">
-            <div className="avatar-circle">
-              <span>{user.name.charAt(0)}</span>
-            </div>
-            <h2 className="grid-name">{user.name}</h2>
-            <p className="grid-email">{user.email}</p>
-            <p className="grid-company">{user.company.name}</p>
-            <div className="grid-info">
-              <p>📞 {user.phone}</p>
-              <p>🌐 {user.website}</p>
-              <p>🏠 {user.address.city}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <form onSubmit={handleSearch} style={{ marginBottom: 20 }}>
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="Masukkan nama kota..."
+          style={{
+            width: "70%",
+            padding: 8,
+            border: "1px solid #ccc",
+            borderRadius: 6,
+          }}
+        />
+        <button
+          type="submit"
+          style={{
+            marginLeft: 8,
+            padding: "8px 12px",
+            background: "#4caf50",
+            color: "white",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          Cari
+        </button>
+      </form>
+
+      {loading && <p>🔄 Memuat data...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {weather && (
+        <div style={{ textAlign: "center" }}>
+          <h3>{weather.location.name}, {weather.location.country}</h3>
+          <img
+            src={weather.current.condition.icon}
+            alt={weather.current.condition.text}
+          />
+          <h2>{weather.current.temp_c}°C</h2>
+          <p>{weather.current.condition.text}</p>
+          <p>Kelembapan: {weather.current.humidity}%</p>
+          <p>Angin: {weather.current.wind_kph} km/jam</p>
+        </div>
+      )}
     </div>
   );
 }
